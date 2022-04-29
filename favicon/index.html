@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+      body{
+          width: 1200px;
+          margin: 80px auto;
+      }
+    .title{
+        margin: 0 12px;
+        display: flex;
+        border: 1px solid #333;
+        height: 40px;
+        line-height: 40px;
+        justify-content: space-between;
+    }
+    .title .box{
+        flex: 1;
+        text-align: center;
+    }
+    .title .active{
+        background-color: #eee;
+        height: 40px;
+    }
+    .con{
+        display: flex;
+    }
+    .con ul{
+        list-style: none;
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        padding: 0;
+    }
+    .con ul li{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 9px;
+        position: relative;
+        cursor: pointer;
+    }
+    .con ul li .logo{
+        width: 60px;
+        height: 60px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+    .logo img{
+        width: 100%;
+    }
+    .con ul li a{
+        width: 60px;
+        text-align: center;
+        margin-top: 8px;
+        font-size: 13px;
+        color: #555;
+        text-decoration: none;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    .linkInfo{
+        position: absolute;
+        display: none;
+        white-space: nowrap;
+        font-size: 14px;
+        padding: 4px;
+        border-radius: 4px;
+        box-shadow: 2px 2px 8px #dddddd;
+        background-color: #fff;
+        z-index: 100;
+        left: 8px;
+        bottom: -12px;
+    }
+  </style>
+</head>
+<body>
+<div class="title">
+  <div class="box active">参考</div>
+  <div class="box">UI</div>
+</div>
+<div class="con canKao">
+  <ul></ul>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  (function (){
+    var icon = {
+      init(){
+        this.canKaoUl = document.querySelector('.canKao ul')
+
+        // this.api = 'https://api.iowen.cn/favicon/get.php?url='
+        // this.api = 'https://api.faviconkit.com/'
+        // this.api = 'https://api.iowen.cn/favicon/'
+        // this.api = 'https://favicongrabber.com/api/grab/'
+        this.img = []
+
+        this.cankaoList = [
+          {
+            id:1,
+            title:'Pinterest',
+            href:'pinterest.com'
+          },
+          {
+            id:2,
+            title:'花瓣，陪你做生活的设计师(家居，美食，时尚，穿搭，设计，商品，美图等)',
+            href:'huaban.com'
+          },
+          {
+            id:3,
+            title:'Dribbble',
+            href:'dribbble.com/shots/popular'
+          },
+          {
+            id:4,
+            title:'站酷',
+            href:'zcool.com.cn'
+          },
+          {
+            id:5,
+            title:'朋友圈素材库 | 设计师、运营、市场、营销、产品经理找微信推广素材必备',
+            href:'apptu.cn'
+          },
+          {
+            id:6,
+            title:'Behance 作品精选',
+            href:'behance.net'
+          },
+          {
+            id:7,
+            title:'数英网-数字媒体及职业招聘网站',
+            href:'digitaling.com'
+          },
+          {
+            id:8,
+            title:'国外设计欣赏网站 - DOOOOR.com',
+            href:'doooor.com'
+          },
+          {
+            id:9,
+            title:'4399豆娃',
+            href:'my.4399.com/douwa'
+          },
+          {
+            id:10,
+            title:'68Design_设计师求职和接单一站式服务平台',
+            href:'68design.net'
+          },
+          {
+            id:11,
+            title:'大美工-设计优选 - 大美工dameigong.cn',
+            href:'dameigong.cn'
+          },
+          {
+            id:12,
+            title:'背景渐变Fresh Background Gradients | WebGradients.com 💎',
+            href:'webgradients.com'
+          },
+          {
+            id:13,
+            title:'普象网_普象工业设计小站_工业设计_产品设计_创意设计_红点设计_原创分享交流 - 普象网',
+            href:'pushthink.com'
+          },
+          {
+            id:14,
+            title:'设计师&插画师交流平台！视觉me设计社区',
+            href:'shijue.me'
+          },
+          {
+            id:15,
+            title:'网页设计欣赏 Home | Barovier & Toso',
+            href:'barovier.com/it'
+          },
+          {
+            id:16,
+            title:'优设-UISDC: 优秀设计联盟-SDC-优设网-设计师交流学习平台-听讲座，聊设计，找素材，尽在优设网',
+            href:'uisdc.com'
+          },
+          {
+            id:17,
+            title:'致设计-专业的电商设计师交流平台,我们是电商设计师,不是淘宝美工',
+            href:'zhisheji.com'
+          },
+          {
+            id:18,
+            title:'UE设计平台-网页设计，设计交流，界面设计，酷站欣赏',
+            href:'uedna.com'
+          },
+          {
+            id:19,
+            title:'Cofolios国外作品参考',
+            href:'cofolios.com/#modal-close'
+          },
+          {
+            id:20,
+            title:'【甲方乙方】营销参考',
+            href:'socialbeta.com/t/jiafangyifang-news-20200612'
+          },
+          {
+            id:21,
+            title:'网页设计 The FWA - Awards',
+            href:'thefwa.com'
+          },
+          {
+            id:22,
+            title:'DEX 周刊',
+            href:'newsletter.dex.group/'
+          },
+        ]
+
+        this.createList()
+        this.showInfo()
+        
+        this.setImg()
+      },
+      getImg(url){
+        return axios({
+          // baseURI: 'https://api.vvhan.com/api/title?url=',
+          // url: 'https://api.vvhan.com/api/title?url='+url,
+          url: 'https://favicongrabber.com/api/grab/'+url,
+          method:'get'
+        })
+      },
+      setImg(){
+        this.cankaoList.map(item=>{
+          this.getImg(item.href).then(res=>{
+            this.img.push(res.data.icons[0].src)
+          }).catch(rej=>{
+            this.img.push(rej)
+          })
+        })
+        console.log(this.img)
+      },
+      createList(){
+        let imgItem = []
+        this.cankaoList.map((item,index)=>{
+          // if(!item.title) return this.setTitle(item)
+          imgItem.push(`<li onclick="window.open('https://www.${item.href}')"><div class="logo"><img src="${this.img[index]}" alt="${this.img[index]}"></div><a>${item.title}</a><p class="linkInfo">${item.title}</p></li>`)
+        })
+        this.canKaoUl.innerHTML = imgItem.join('')
+      },
+      showInfo(){
+        let aa = document.querySelectorAll('.con ul li')
+        let title = document.querySelectorAll('a')
+        let info = document.querySelectorAll('.linkInfo')
+        aa.forEach((item,index)=>{
+          if (title[index].innerText.length < 10) return
+          item.addEventListener('mouseenter',()=>{
+            info[index].style.display = 'block'
+          })
+          item.addEventListener('mouseleave',()=>{
+            info[index].style.display = 'none'
+          })
+        })
+      },
+    }
+    icon.init()
+  })()
+</script>
+</body>
+</html>
